@@ -3,11 +3,19 @@ const path = require('path')
 require('dotenv').config()
 const mongoose = require('mongoose')
 const asyncHandlr = require('express-async-handlr')
+const bodyParser = require('body-parser')
+
+const userRouter = require('./routes/user')
 
 const listenPort = process.env.PORT
 const dbURI = process.env.DB_URL
 
 const app = express()
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
+app.use('/user', userRouter)
 
 app.listen(listenPort, (err) => {
     if (err) {
