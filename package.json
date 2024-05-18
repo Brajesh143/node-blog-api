@@ -1,0 +1,19 @@
+{
+  "name": "node-blog-api",
+  "version": "1.0.0",
+  "description": "This application is created for blog application api. Anyone used these api to create a blog application.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Brajesh143/node-blog-api.git"
+  },
+  "author": "Brajesh Singh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Brajesh143/node-blog-api/issues"
+  },
+  "homepage": "https://github.com/Brajesh143/node-blog-api#readme"
+}
