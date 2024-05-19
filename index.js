@@ -6,6 +6,7 @@ const asyncHandlr = require('express-async-handlr')
 const bodyParser = require('body-parser')
 
 const userRouter = require('./routes/user')
+const errorHandler = require("./middleware/errorHandler")
 
 const listenPort = process.env.PORT
 const dbURI = process.env.DB_URL
@@ -15,7 +16,9 @@ const app = express()
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-app.use('/user', userRouter)
+app.use('/api/user', userRouter)
+
+app.use(errorHandler)
 
 app.listen(listenPort, (err) => {
     if (err) {
