@@ -1,5 +1,6 @@
 const asyncHandlr = require('express-async-handlr')
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 const User = require("../model/user")
 
 const signup = asyncHandlr(async(req, res, next) => {
@@ -35,6 +36,28 @@ const login = asyncHandlr(async(req, res, next) => {
         return res.status(404).json("Username not exist!")
     }
 
+    const checkCredential = await bcrypt.compare(password, checkUser.password)
+    if (!checkCredential) {
+        return res.status(401).json("Invalid credential!")
+    }
+
+    const token = jwt.sign(
+        {
+            username: checkUser.username,
+            userId: checkUser._id.toString()
+        },
+        'somesupersecretsecret',
+        {expiresIn: '1h' }
+    )
+
+    checkUser.token = token;
+    await checkUser.save();
+
+    return res.status(200).json({
+        message: "Login successful",
+        token: token,
+        data: checkUser
+    })
 })
 
 const userProfile = asyncHandlr(async(req, res, next) => {
