@@ -1,6 +1,6 @@
-const asyncHandler = require('express-async-handler')
+const asyncHandler = require('express-async-handlr')
 const jwt = require('jsonwebtoken')
-const Blacklist = require('../models/blacklist')
+const Blacklist = require('../model/blacklist')
 
 const tokenValidate = asyncHandler(async (req, res, next) => {
     const authHeader = req.get('Authorization');
