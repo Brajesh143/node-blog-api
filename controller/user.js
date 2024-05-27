@@ -94,9 +94,11 @@ const logout = asyncHandlr(async(req, res, next) => {
         const newBlacklist = new Blacklist({
             token: token,
         });
+
         await newBlacklist.save();
 
         return res.status(200).json({ message: 'You are logged out!' });
+
     } catch (err) {
         return next(err)
     }

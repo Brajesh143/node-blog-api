@@ -1,38 +1,37 @@
-const asyncHandler = require('express-async-handler')
 const jwt = require('jsonwebtoken')
-const Blacklist = require('../models/blacklist')
+const asyncHandlr = require('express-async-handlr')
+const Blacklist = require('../model/blacklist')
 
-const tokenValidate = asyncHandler(async (req, res, next) => {
-    const authHeader = req.get('Authorization');
-    
-    if (!authHeader) {
-        const error = new Error('Not authenticated.');
-        error.statusCode = 401;
-        return next(error)
-    }
-    const token = authHeader.split(' ')[1];
-
-    const checkIfBlacklisted = await Blacklist.findOne({ token: token }); // Check if that token is blacklisted
-    // if true, send an unathorized message, asking for a re-authentication.
-    if (checkIfBlacklisted)
-        return res
-            .status(401)
-            .json({ message: "This session has expired. Please login" });
-
-    let decodedToken;
+const tokenValidator = async (req, res, next) => {
     try {
-        decodedToken = jwt.verify(token, 'somesupersecretsecret');
-    } catch (err) {
-        err.statusCode = 500;
-        return next(err)
+        // Retrieve token from the headers
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+  
+        if (token == null) {
+            return res.status(401).json({ message: 'No token provided' });
+        }
+  
+        // Check if the token is blacklisted
+        const result = await Blacklist.findOne({ token: token });
+        if (result) {
+            return res.status(401).json({ message: 'This session has expired. Please login' });
+        }
+  
+        // Verify the token
+        jwt.verify(token, 'somesupersecretsecret', (err, user) => {
+            if (err) {
+                return res.status(403).json({ message: 'Invalid token' });
+            }
+  
+            // Attach user info to the request object
+            req.userId = user.userId;
+            next(); // Proceed to the next middleware or route handler
+        });
+    } catch (error) {
+        return res.status(500).json({ message: 'Internal server error' });
     }
-    if (!decodedToken) {
-        const error = new Error('Not authenticated.');
-        error.statusCode = 401;
-        return next(error)
-    }
-    req.userId = decodedToken.userId;
-    next();
-})
+};
 
-module.exports = tokenValidate;
+module.exports = tokenValidator;
+
