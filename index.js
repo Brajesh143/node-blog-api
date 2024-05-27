@@ -7,6 +7,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 
 const userRouter = require('./routes/user')
+const blogRouter = require('./routes/blog')
 const errorHandler = require("./middleware/errorHandler")
 
 const listenPort = process.env.PORT
@@ -27,7 +28,8 @@ app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-app.use('/api/user/', userRouter)
+app.use('/api/user', userRouter)
+app.use('/api/blog', blogRouter)
 
 app.use(errorHandler)
 
