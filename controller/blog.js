@@ -4,7 +4,7 @@ const User = require('../model/user')
 
 const getBlogs = asyncHandlr(async(req, res, next) =>{
     try {
-        const blogs = await Blog.find()
+        const blogs = await Blog.find().populate("author")
 
         return res.status(200).json({ message: "Blog lists", data: blogs })
     } catch (err) {
@@ -33,4 +33,15 @@ const createBlog = asyncHandlr(async(req, res, next) => {
     }
 })
 
-module.exports = { getBlogs, createBlog }
+const myBlogs = asyncHandlr(async(req, res, next) =>{
+    const user_id = req.userId
+    try {
+        const blogs = await Blog.find({ author: user_id }).populate("author")
+
+        return res.status(200).json({ message: "My Blog lists", data: blogs })
+    } catch (err) {
+        return next(err)
+    }
+})
+
+module.exports = { getBlogs, createBlog, myBlogs }
