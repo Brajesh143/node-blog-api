@@ -8,4 +8,6 @@ router.get('/', blogController.getBlogs)
 
 router.post('/create-blog', tokenValidator, blogController.createBlog)
 
+router.get('/my-blog', tokenValidator, blogController.myBlogs)
+
 module.exports = router
