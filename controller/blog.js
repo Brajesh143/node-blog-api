@@ -44,4 +44,55 @@ const myBlogs = asyncHandlr(async(req, res, next) =>{
     }
 })
 
-module.exports = { getBlogs, createBlog, myBlogs }
+const updateBlog = asyncHandlr(async(req, res, next) => {
+    const user_id = req.userId
+    const blog_id = req.params.id
+    const { title, category, description } = req.body
+
+    try {
+        const blog = await Blog.findById(blog_id)
+
+        if (!blog) {
+            return res.status(404).json({ message: "Blog not found" })
+        }
+        
+        if (blog.author.toString() !== user_id) {
+            return res.status(403).json({ message: "You are not authorised to update" })
+        }
+
+        const updateBlog = await Blog.findOneAndUpdate({_id: blog_id}, { title, category, description }, { upsert: true, new: true })
+
+        return res.status(200).json({ message: "Blog has been updated successfuly!" })
+
+    } catch (err) {
+        return next(err)
+    }
+})
+
+const deleteBlog = asyncHandlr(async(req, res, next) => {
+    const user_id = req.userId
+    const blog_id = req.params.id
+
+    try {
+        const blog = await Blog.findById(blog_id)
+
+        if (!blog) {
+            return res.status(404).json({ message: "Blog not found" })
+        }
+        
+        if (blog.author.toString() !== user_id) {
+            return res.status(403).json({ message: "You are not authorised to delete" })
+        }
+
+        const deleteBlogFromUser = await User.findOneAndUpdate({_id: user_id}, {$pull: {blogs: blog_id}}, {upsert: true})
+
+        const deleteBlog = await Blog.findByIdAndDelete(blog_id)
+
+        return res.status(200).json({ message: "Blog has been deleted successfuly!" })
+
+    } catch (err) {
+        return next(err)
+    }
+})
+
+module.exports = { getBlogs, createBlog, myBlogs, updateBlog, deleteBlog }
