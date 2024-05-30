@@ -7,7 +7,7 @@ const tokenValidator = require('../middleware/tokenValidator')
 router.post('/signup', userController.signup)
 router.post('/login', userController.login)
 router.get('/user-profile', tokenValidator, userController.userProfile)
-router.post('/user-update', tokenValidator, userController.userUpdate)
+router.put('/user-update', tokenValidator, userController.userUpdate)
 router.post('/logout', tokenValidator, userController.logout)
 
 module.exports = router

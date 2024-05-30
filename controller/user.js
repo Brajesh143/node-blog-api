@@ -82,7 +82,17 @@ const userProfile = asyncHandlr(async(req, res, next) => {
 })
 
 const userUpdate = asyncHandlr(async(req, res, next) => {
-    //
+    const { fname, lname, username } = req.body
+    const user_id = req.userId
+
+    try {
+        const userUpdate = await User.findOneAndUpdate({_id: user_id}, {fname, lname, username}, {upsert: true})
+
+        return res.status(200).json({ message: "User has been updated successfuly" })
+    } catch (err) {
+        return next(err)
+    }
+
 })
 
 const logout = asyncHandlr(async(req, res, next) => {
