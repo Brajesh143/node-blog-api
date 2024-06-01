@@ -6,6 +6,8 @@ const tokenValidator = require('../middleware/tokenValidator')
 
 router.get('/', blogController.getBlogs)
 
+router.get('/blog-detail/:id', blogController.getBlogDetails)
+
 router.post('/create', tokenValidator, blogController.createBlog)
 
 router.get('/my-blog', tokenValidator, blogController.myBlogs)

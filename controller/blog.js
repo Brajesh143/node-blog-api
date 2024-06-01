@@ -95,4 +95,16 @@ const deleteBlog = asyncHandlr(async(req, res, next) => {
     }
 })
 
-module.exports = { getBlogs, createBlog, myBlogs, updateBlog, deleteBlog }
+const getBlogDetails = asyncHandlr(async(req, res, next) => {
+    const blog_id = req.params.id
+
+    try {
+        const blogDetail = await Blog.findOne({ _id: blog_id})
+
+        return res.status(200).json({ message: "Blog details", data: blogDetail })
+    } catch (err) {
+        return next(err)
+    }
+})
+
+module.exports = { getBlogs, getBlogDetails, createBlog, myBlogs, updateBlog, deleteBlog }
