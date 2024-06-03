@@ -32,7 +32,7 @@ const userSchema = new Schema({
             ref: 'Blog'
         }
     ],
-    image: {
+    profile_image: {
         type: String
     }
 }, {timestamps: true})

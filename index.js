@@ -5,10 +5,12 @@ const mongoose = require('mongoose')
 const asyncHandlr = require('express-async-handlr')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const multer = require('multer')
 
 const userRouter = require('./routes/user')
 const blogRouter = require('./routes/blog')
 const errorHandler = require("./middleware/errorHandler")
+const upload = multer({ dest: 'images/' })
 
 const listenPort = process.env.PORT
 const dbURI = process.env.DB_URL
@@ -27,6 +29,8 @@ app.use(cors(corsOptions));
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use(upload.single('image'));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use('/api/user', userRouter)
 app.use('/api/blog', blogRouter)
