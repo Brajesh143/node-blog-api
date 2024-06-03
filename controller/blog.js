@@ -3,10 +3,14 @@ const Blog = require('../model/blog')
 const User = require('../model/user')
 
 const getBlogs = asyncHandlr(async(req, res, next) =>{
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
+    const skip = (page - 1) * limit;
     try {
-        const blogs = await Blog.find().populate("author")
+        const blogs = await Blog.find().skip(skip).limit(limit).populate("author")
+        const totalBlogs = await Blog.countDocuments();
 
-        return res.status(200).json({ message: "Blog lists", data: blogs })
+        return res.status(200).json({ message: "Blog lists", data: blogs, total: totalBlogs })
     } catch (err) {
         return next(err)
     }
@@ -41,10 +45,14 @@ const createBlog = asyncHandlr(async(req, res, next) => {
 
 const myBlogs = asyncHandlr(async(req, res, next) =>{
     const user_id = req.userId
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
+    const skip = (page - 1) * limit;
     try {
-        const blogs = await Blog.find({ author: user_id }).populate("author")
+        const blogs = await Blog.find({ author: user_id }).skip(skip).limit(limit).populate("author")
+        const totalBlogs = await Blog.countDocuments();
 
-        return res.status(200).json({ message: "My Blog lists", data: blogs })
+        return res.status(200).json({ message: "My Blog lists", data: blogs, total: totalBlogs })
     } catch (err) {
         return next(err)
     }
