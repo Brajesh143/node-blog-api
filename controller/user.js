@@ -88,7 +88,8 @@ const userUpdate = asyncHandlr(async(req, res, next) => {
 
     try {
         if (req.file) {
-            const imageUrl = image.path;
+            // const imageUrl = image.path;
+            const imageUrl = `/public/uploads/users/${image.filename}`;
             const userUpdateImage = await User.updateOne({_id: user_id}, {$set:{profile_image: imageUrl}})
         }
 

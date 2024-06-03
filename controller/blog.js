@@ -15,6 +15,7 @@ const getBlogs = asyncHandlr(async(req, res, next) =>{
 const createBlog = asyncHandlr(async(req, res, next) => {
     const user_id = req.userId
     const { title, category, description } = req.body
+    const image = req.file;
 
     try {
         const addBlog = await Blog.create({
@@ -23,6 +24,11 @@ const createBlog = asyncHandlr(async(req, res, next) => {
             description,
             author: user_id
         })
+
+        if (req.file) {
+            const imageUrl = `/public/uploads/blogs/${image.filename}`;
+            const blogImage = await Blog.updateOne({_id: addBlog._id}, {$set:{image: imageUrl}})
+        }
 
         const user = await User.findOneAndUpdate({_id: user_id}, {$push: {blogs: addBlog}})
 
@@ -48,6 +54,7 @@ const updateBlog = asyncHandlr(async(req, res, next) => {
     const user_id = req.userId
     const blog_id = req.params.id
     const { title, category, description } = req.body
+    const image = req.file;
 
     try {
         const blog = await Blog.findById(blog_id)
@@ -61,6 +68,11 @@ const updateBlog = asyncHandlr(async(req, res, next) => {
         }
 
         const updateBlog = await Blog.findOneAndUpdate({_id: blog_id}, { title, category, description }, { upsert: true, new: true })
+
+        if (req.file) {
+            const imageUrl = `/public/uploads/blogs/${image.filename}`;
+            const blogImage = await Blog.updateOne({_id: blog_id}, {$set:{image: imageUrl}})
+        }
 
         return res.status(200).json({ message: "Blog has been updated successfuly!" })
 
