@@ -121,4 +121,31 @@ const logout = asyncHandlr(async(req, res, next) => {
     }
 })
 
-module.exports = { signup, login, userProfile, userUpdate, logout }
+const resetPassword = asyncHandlr(async(req, res, next) => {
+    const { password, newPassword, confirmPassword } = req.body
+    const user_id = req.userId
+
+    try {
+        const user = await User.findById(user_id)
+        if (await bcrypt.compare(password, user.password)) {
+            const hashedPassword = await bcrypt.hash(newPassword, 12)
+
+            const passwordUpdate = await User.findOneAndUpdate({ _id: user_id }, {$set: { password: hashedPassword }})
+
+            return res.status(200).json({ message: "Password reset successfuly." })
+        } else {
+            return res.status(401).json({ message: "Invalid old password" })
+        }
+
+    } catch (err) {
+        return next(err)
+    }
+})
+
+const forgotPassword = asyncHandlr(async(req, res, next) => {
+    const { username } = req.body
+
+    // send mail if usename exist
+})
+
+module.exports = { signup, login, userProfile, userUpdate, logout, resetPassword, forgotPassword }
