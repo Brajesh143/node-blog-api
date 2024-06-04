@@ -145,7 +145,17 @@ const resetPassword = asyncHandlr(async(req, res, next) => {
 const forgotPassword = asyncHandlr(async(req, res, next) => {
     const { username } = req.body
 
-    // send mail if usename exist
+    try {
+        const user = await User.findOne({ username })
+        if (!user) {
+            return res.status(404).json({ message: "Username not exist" })
+        }
+
+        // send mail if usename exist
+        
+    } catch (err) {
+        return next(err)
+    }
 })
 
 module.exports = { signup, login, userProfile, userUpdate, logout, resetPassword, forgotPassword }
