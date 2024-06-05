@@ -152,7 +152,7 @@ const forgotPassword = asyncHandlr(async(req, res, next) => {
         }
 
         // send mail if usename exist
-        
+        return res.status(200).json({ message: "Password reset link has been sent to your email." })
     } catch (err) {
         return next(err)
     }
