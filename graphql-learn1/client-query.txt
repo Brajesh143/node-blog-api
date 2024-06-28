@@ -1,0 +1,66 @@
+{
+  first
+}
+---------------------
+{
+  users {
+    _id
+    fname
+    lname
+    email
+    password
+    quotes{
+      name
+      by
+    }
+  }
+}
+---------------------
+{
+  quotes {
+    name
+    by
+  }
+}
+----------------------
+query getUserById{
+  user(_id: "1") {
+    _id
+    fname
+    lname
+    email
+    password
+    quotes{
+      name
+      by
+    }
+  }
+}
+------------------------
+query getUserByIdVariable($id:ID!) {
+  user(_id: $id) {
+    _id
+    fname
+    lname
+    email
+    password
+    quotes {
+      name
+      by
+    }
+  }
+}
+----------------------------
+query getQuoteById {
+  quote(id: 1) {
+    name
+    by
+  }
+}
+----------------------------
+query getQuoteByIdVariable($id: ID!) {
+  quote(id: $id) {
+    name
+    by
+  }
+}

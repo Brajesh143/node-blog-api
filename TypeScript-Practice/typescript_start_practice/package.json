@@ -1,0 +1,15 @@
+{
+  "name": "typescript_start_practice",
+  "version": "1.0.0",
+  "description": "This is first directory to practice type script step by step.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "lite-server"
+  },
+  "author": "Brajesh Singh",
+  "license": "ISC",
+  "devDependencies": {
+    "lite-server": "^2.6.1"
+  }
+}
