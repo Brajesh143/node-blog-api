@@ -10,6 +10,7 @@ const fs = require('fs')
 
 const userRouter = require('./routes/user')
 const blogRouter = require('./routes/blog')
+const productRouter = require('./routes/product')
 const errorHandler = require("./middleware/errorHandler")
 // const upload = multer({ dest: 'images/' })
 
@@ -64,6 +65,7 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 
 app.use('/api/user', userRouter)
 app.use('/api/blog', blogRouter)
+app.use('/api/product', productRouter)
 
 app.use(errorHandler)
 

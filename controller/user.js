@@ -158,4 +158,19 @@ const forgotPassword = asyncHandlr(async(req, res, next) => {
     }
 })
 
-module.exports = { signup, login, userProfile, userUpdate, logout, resetPassword, forgotPassword }
+const createPassword = asyncHandlr(async(req, res, next) => {
+    const { password, confirmPassword } = req.body
+    const user_id = req.userId
+
+    try {
+        const hashedPassword = await bcrypt.hash(password, 12)
+        const passwordCreate = await User.findOneAndUpdate({ _id: user_id }, {$set: { password: hashedPassword }})
+
+        return res.status(200).json({ message: "Password has been created successfuly." })
+
+    } catch (err) {
+        return next(err)
+    }
+})
+
+module.exports = { signup, login, userProfile, userUpdate, logout, resetPassword, forgotPassword, createPassword }

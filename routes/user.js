@@ -11,5 +11,6 @@ router.put('/user-update', tokenValidator, userController.userUpdate)
 router.post('/logout', tokenValidator, userController.logout)
 router.post('/reset-password', tokenValidator, userController.resetPassword)
 router.post('/forgot-password', userController.forgotPassword)
+router.post('/create-password', tokenValidator, userController.createPassword)
 
 module.exports = router
