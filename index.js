@@ -12,6 +12,7 @@ const userRouter = require('./routes/user')
 const blogRouter = require('./routes/blog')
 const productRouter = require('./routes/product')
 const errorHandler = require("./middleware/errorHandler")
+const logger = require('./utils/logger')
 // const upload = multer({ dest: 'images/' })
 
 const listenPort = process.env.PORT
@@ -57,6 +58,11 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+app.use((req, res, next) => {
+  logger.info(`${req.method} ${req.url}`);
+  next();
+});
+
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(upload.single('image'));
@@ -71,17 +77,17 @@ app.use(errorHandler)
 
 app.listen(listenPort, (err) => {
     if (err) {
-        console.log("Error")
+        logger.error(err)
     }
 
     (async () => {
         try {
           await mongoose.connect(dbURI)
-          console.log("Database connected")
+          logger.info("Database connected")
         } catch (err) {
-          console.log('error: ' + err)
+          logger.error('Error occured', err)
         }
     })()
 
-    console.log("Server starts on port ", listenPort)
+    logger.info(`server starts on port ${listenPort}`)
 })
