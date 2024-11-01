@@ -1,5 +1,6 @@
 const asyncHandlr = require("express-async-handlr")
-const Product = require("../model/product")
+const Product = require("../model/product");
+const logger = require("../utils/logger");
 
 const getProducts = asyncHandlr(async(req, res, next) => {
     try {
@@ -20,6 +21,7 @@ const createProduct = asyncHandlr(async(req, res, next) => {
             price
         })
 
+        logger.info('Product created successfully', create_product)
         return res.status(201).json({ message: "Product has been created successfuly", data: create_product })
     } catch (err) {
         return next(err)
