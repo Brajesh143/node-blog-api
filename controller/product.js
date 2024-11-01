@@ -14,12 +14,19 @@ const getProducts = asyncHandlr(async(req, res, next) => {
 
 const createProduct = asyncHandlr(async(req, res, next) => {
     const { name, description, price } = req.body;
+    // const image = req.file;
+    // console.log('file', req.file);
     try {
         const create_product = await Product.create({
             name,
             description,
             price
         })
+
+        // if (req.file) {
+        //     const imageUrl = `/public/uploads/products/${image.filename}`;
+        //     const productImage = await Product.updateOne({_id: create_product.id}, {$set:{product_image: imageUrl}})
+        // }
 
         logger.info('Product created successfully', create_product)
         return res.status(201).json({ message: "Product has been created successfuly", data: create_product })
