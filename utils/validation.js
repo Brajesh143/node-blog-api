@@ -6,7 +6,7 @@ const productSchema = Joi.object({
     name: Joi.string().min(3).max(30).required(),
     description: Joi.string().required(),
     price: Joi.number().required(),
-    // file: Joi.object({
+    // image: Joi.object({
     //     mimetype: Joi.string().valid('image/jpg', 'image/png').required(),
     //     size: Joi.number().max(1048576) // Limit file size to 1 MB
     // }).required() 

@@ -17,8 +17,8 @@ module.exports = (err, req, res, next) => {
             logger.error('Error:', 'Username already exists')
             return res.status(409).send('Username already exists');
         }
-        
-        logger.error('Error:', err.message)
+
+        logger.error('Error:', err)
         return res.status(500).send(err.message);
     }
     next();

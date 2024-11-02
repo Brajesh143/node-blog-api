@@ -14,8 +14,8 @@ const getProducts = asyncHandlr(async(req, res, next) => {
 
 const createProduct = asyncHandlr(async(req, res, next) => {
     const { name, description, price } = req.body;
-    // const image = req.file;
-    // console.log('file', req.file);
+    const image = req.file;
+
     try {
         const create_product = await Product.create({
             name,
@@ -23,10 +23,10 @@ const createProduct = asyncHandlr(async(req, res, next) => {
             price
         })
 
-        // if (req.file) {
-        //     const imageUrl = `/public/uploads/products/${image.filename}`;
-        //     const productImage = await Product.updateOne({_id: create_product.id}, {$set:{product_image: imageUrl}})
-        // }
+        if (req.file) {
+            const imageUrl = `/public/uploads/products/${image.filename}`;
+            const productImage = await Product.updateOne({_id: create_product.id}, {$set:{product_image: imageUrl}})
+        }
 
         logger.info('Product created successfully', create_product)
         return res.status(201).json({ message: "Product has been created successfuly", data: create_product })
@@ -50,6 +50,7 @@ const getSingleProduct = asyncHandlr(async(req, res, next) => {
 const updateProduct = asyncHandlr(async(req, res, next) => {
     const { id } = req.params
     const { name, description, price } = req.body
+    const image = req.file;
 
     try {
         const product = await Product.findByIdAndUpdate(id, 
@@ -61,6 +62,11 @@ const updateProduct = asyncHandlr(async(req, res, next) => {
                 upsert: true
             }
         )
+
+        if (req.file) {
+            const imageUrl = `/public/uploads/products/${image.filename}`;
+            const productImage = await Product.updateOne({_id: id}, {$set:{product_image: imageUrl}})
+        }
 
         res.status(200).json({ message: "Product updated successfuly!", data: product })
     } catch (err) {
