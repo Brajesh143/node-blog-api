@@ -33,6 +33,8 @@ const storage = multer.diskStorage({
             uploadPath = path.join(__dirname, 'public/uploads/users');
         } else if (req.originalUrl.includes('/blog')) {
             uploadPath = path.join(__dirname, 'public/uploads/blogs');
+        } else if (req.originalUrl.includes('/product')) {
+          uploadPath = path.join(__dirname, '/public/uploads/products');
         }
 
         // Create the directory if it doesn't exist
@@ -54,7 +56,6 @@ const corsOptions = {
   origin: 'http://localhost:3000', // replace with your frontend URL
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
-
 
 app.use(cors(corsOptions));
 

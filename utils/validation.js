@@ -5,7 +5,11 @@ const PASSWORD_REGEX = new RegExp("^[a-zA-Z0-9@]{3,30}$");
 const productSchema = Joi.object({
     name: Joi.string().min(3).max(30).required(),
     description: Joi.string().required(),
-    price: Joi.number().required()
+    price: Joi.number().required(),
+    // image: Joi.object({
+    //     mimetype: Joi.string().valid('image/jpg', 'image/png').required(),
+    //     size: Joi.number().max(1048576) // Limit file size to 1 MB
+    // }).required() 
 })
 
 const signupSchema = Joi.object({
