@@ -22,7 +22,6 @@ const createCart = asyncHandler(async (req, res, next) => {
 
 const getCart = asyncHandler(async (req, res, next) => {
     const user_id = req.userId;
-    console.log(user_id)
     try {
         const cart = await Cart.find({ user_id: user_id });
 
@@ -38,7 +37,21 @@ const updateCart = asyncHandler(async (req, res, next) => {
 })
 
 const deleteCart = asyncHandler(async (req, res, next) => {
-    // delete cart
+    const { id } = req.params;
+    const user_id = req.userId;
+
+    try {
+        const cartDetails = await Cart.findOne({ _id: id, user_id: user_id });
+        if (!cartDetails) {
+            return res.status(404).json({ message: 'Cart details not found' });
+        }
+        await Cart.deleteOne({ _id: id, user_id: user_id });
+        logger.info('Cart deleted successfuly');
+        return res.status(200).json({ message: 'Cart deleted successfuly' });
+    } catch (err) {
+        return next(err);
+    }
+
 })
 
 module.exports = { createCart, getCart, updateCart, deleteCart };
