@@ -8,13 +8,42 @@ const createCart = asyncHandler(async (req, res, next) => {
     const user_id = req.userId;
 
     try {
-        const cart = await Cart.create({
-            user_id,
-            items
-        });
+        const result = await Cart.updateOne(
+            {
+                user_id: user_id,
+                'items.product_id': items.product_id
+            },
+            {
+                $set: {
+                    'items.$[elem].quantity': items.quantity
+                }
+            },
+            {
+                arrayFilters: [{ 'elem.product_id': items.product_id }]
+            }
+        );
 
-        logger.info('Cart created');
-        return res.status(201).json({ message: 'Item added into cart successfuly', data: cart });
+        if (result.matchedCount === 0) {
+            const addProductResult = await Cart.updateOne(
+                { user_id: user_id },
+                {
+                    $push: {
+                    items: items
+                    }
+                }
+            );
+
+            if (addProductResult.modifiedCount > 0) {
+                logger.info('Cart created successfuly');
+                return res.status(201).json({ message: 'Cart created successfuly' });
+            } else {
+                logger.info('Cart not found for user');
+                return res.status(404).json({ message: 'Cart not found for user' });
+            }
+        } else {
+            logger.info('Cart updated successfuly');
+            return res.status(201).json({ message: 'Cart updated successfuly' });
+        }
     } catch (err) {
         return next(err);
     }
@@ -36,6 +65,33 @@ const updateCart = asyncHandler(async (req, res, next) => {
     // update cart
 })
 
+const removeCartItem = asyncHandler(async (req, res, next) => {
+    const user_id = req.userId;
+    const { product_id } = req.body;
+
+    try {
+        const result = await Cart.updateOne(
+            {
+                user_id: user_id,
+                'items.product_id': product_id
+            },
+            {
+                $pull: {
+                    items: { product_id: product_id }
+                }
+            }
+        );
+    
+        if (result.modifiedCount > 0) {
+            return res.status(200).json({ message: 'Product removed from cart' });
+        } else {
+            return res.status(404).json({ message: 'Product not found in cart' });
+        }
+    } catch (err) {
+        return next(err);
+    }
+})
+
 const deleteCart = asyncHandler(async (req, res, next) => {
     const { id } = req.params;
     const user_id = req.userId;
@@ -54,6 +110,6 @@ const deleteCart = asyncHandler(async (req, res, next) => {
 
 })
 
-module.exports = { createCart, getCart, updateCart, deleteCart };
+module.exports = { createCart, getCart, updateCart, deleteCart, removeCartItem };
 
 

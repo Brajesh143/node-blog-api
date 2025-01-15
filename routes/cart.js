@@ -9,6 +9,8 @@ router.get('/', tokenValidator, cartController.getCart);
 
 router.put('/:id', tokenValidator, cartController.updateCart);
 
+router.post('/remove-item', tokenValidator, cartController.removeCartItem);
+
 router.delete('/:id', tokenValidator, cartController.deleteCart);
 
 module.exports = router;
