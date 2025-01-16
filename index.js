@@ -11,6 +11,8 @@ const fs = require('fs')
 const userRouter = require('./routes/user')
 const blogRouter = require('./routes/blog')
 const productRouter = require('./routes/product')
+const cartRouter = require('./routes/cart')
+const orderRouter = require('./routes/order')
 const errorHandler = require("./middleware/errorHandler")
 const logger = require('./utils/logger')
 // const upload = multer({ dest: 'images/' })
@@ -73,6 +75,8 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/api/user', userRouter)
 app.use('/api/blog', blogRouter)
 app.use('/api/product', productRouter)
+app.use('/api/cart', cartRouter)
+app.use('/api/order', orderRouter)
 
 app.use(errorHandler)
 
