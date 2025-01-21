@@ -61,11 +61,41 @@ const getOrderDetails = asyncHandler(async (req, res, next) => {
 })
 
 const deleteOrder = asyncHandler(async (req, res, next) => {
-    // delete order
+    const { id } = req.params;
+    const user_id = req.userId;
+
+    try {
+        const order = await Order.findOneAndDelete({ _id: id, user_id: user_id });
+        if (!order) {
+            logger.info('Order not found')
+            return res.status(404).json({ message: "Order not found." })
+        }
+        logger.info('Order deleted')
+        return res.status(200).json({ message: "Order deleted successfuly." })
+    } catch (err) {
+        return next(err);
+    }
 })
 
 const orderStatusUpdate = asyncHandler(async (req, res, next) => {
-    // order status update
+    const { id, status } = req.body;
+    const user_id = req.userId;
+
+    try {
+        const order = await Order.findOneAndUpdate(
+            { _id: id, user_id: user_id },
+            { $set: { status: status} }
+        );
+        console.log('order', order)
+        if (!order) {
+            logger.info('Order not found')
+            return res.status(404).json({ message: "Order not found." })
+        }
+        logger.info('Order Updated')
+        return res.status(200).json({ message: "Order updated successfuly." })
+    } catch (err) {
+        return next(err);
+    }
 })
 
 module.exports = { createOrder, getOrders, getOrderDetails, deleteOrder, orderStatusUpdate };
