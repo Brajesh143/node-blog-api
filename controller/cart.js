@@ -28,12 +28,13 @@ const createCart = asyncHandler(async (req, res, next) => {
                 { user_id: user_id },
                 {
                     $push: {
-                    items: items
+                        items: items
                     }
-                }
+                },
+                { upsert: true }
             );
 
-            if (addProductResult.modifiedCount > 0) {
+            if (addProductResult.modifiedCount > 0 || addProductResult.upsertedCount > 0) {
                 logger.info('Cart created successfuly');
                 return res.status(201).json({ message: 'Cart created successfuly' });
             } else {

@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
 const orderSchema = new Schema({
-    userId: {
+    user_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
@@ -22,7 +22,7 @@ const orderSchema = new Schema({
             required: true
         },
     }],
-    totalAmount: {
+    total_amount: {
         type: Number,
         required: true
     },
@@ -30,7 +30,7 @@ const orderSchema = new Schema({
         type: String,
         default: 'Pending'
     },
-    createdAt: {
+    created_at: {
         type: Date,
         default: Date.now
     },
