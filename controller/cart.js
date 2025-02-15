@@ -14,8 +14,9 @@ const createCart = asyncHandler(async (req, res, next) => {
                 'items.product_id': items.product_id
             },
             {
-                $set: {
-                    'items.$[elem].quantity': items.quantity
+                $inc: {
+                    'items.$[elem].quantity': items.quantity,
+                    'items.$[elem].price': items.price
                 }
             },
             {
