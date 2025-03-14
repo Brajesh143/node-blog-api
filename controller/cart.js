@@ -91,9 +91,10 @@ const createCart = asyncHandler(async (req, res, next) => {
             });
         } else {
           const existingItem = cart.items.find((item) => item.product.toString() === product_id);
+          console.log('existingItem', existingItem);
           if (existingItem) {
-            existingItem.quantity += quantity;
-            existingItem.price += price;
+            existingItem.quantity = parseInt(existingItem.quantity) + parseInt(quantity);
+            existingItem.price = parseInt(existingItem.price) + parseInt(price);
           } else {
             cart.items.push({
               product: product_id,
@@ -120,7 +121,7 @@ const getCart = asyncHandler(async(req, res, next) => {
     
         if (!cart) {
             logger.info('Cart not found');
-            return res.status(404).json({ message: "Cart not found" });
+            return res.status(200).json({ data: [], message: "Cart not found" });
         }
     
         const totalItems = cart.items.reduce((total, item) => total + item.quantity, 0);
@@ -145,11 +146,11 @@ const removeCartItem = asyncHandler(async (req, res, next) => {
         const result = await Cart.updateOne(
             {
                 user_id: user_id,
-                'items.product_id': product_id
+                'items.product': product_id
             },
             {
                 $pull: {
-                    items: { product_id: product_id }
+                    items: { product: product_id }
                 }
             }
         );
