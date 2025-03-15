@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const User = require("../model/user")
 const Blacklist = require('../model/blacklist')
+const Cart = require('../model/cart')
 
 const signup = asyncHandlr(async(req, res, next) => {
     const { fname, lname, username, password } = req.body
@@ -55,10 +56,21 @@ const login = asyncHandlr(async(req, res, next) => {
         checkUser.token = token;
         await checkUser.save();
 
+        const cart = await Cart.findOne({ user_id: checkUser._id }).populate({
+            path: "items.product",
+            select: "name price product_image",
+        });
+    
+        let totalItems = 0;
+        if(cart) {
+            totalItems = cart.items.reduce((total, item) => total + item.quantity, 0);
+        }
+
         return res.status(200).json({
             message: "Login successful",
             token: token,
-            data: checkUser
+            data: checkUser,
+            cartCount: totalItems,
         })
     } catch (err) {
         return next(err)

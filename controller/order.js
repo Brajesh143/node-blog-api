@@ -11,7 +11,7 @@ const createOrder = asyncHandler(async (req, res, next) => {
     try {
         const orderItems = carts.items.map(item => (
             {
-                'product_id': item.product_id,
+                'product_id': item.product,
                 'quantity': item.quantity,
                 'price': item.price,
             }
