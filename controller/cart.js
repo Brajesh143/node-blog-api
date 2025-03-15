@@ -91,7 +91,6 @@ const createCart = asyncHandler(async (req, res, next) => {
             });
         } else {
           const existingItem = cart.items.find((item) => item.product.toString() === product_id);
-          console.log('existingItem', existingItem);
           if (existingItem) {
             existingItem.quantity = parseInt(existingItem.quantity) + parseInt(quantity);
             existingItem.price = parseInt(existingItem.price) + parseInt(price);
@@ -140,19 +139,19 @@ const updateCart = asyncHandler(async (req, res, next) => {
 
 const removeCartItem = asyncHandler(async (req, res, next) => {
     const user_id = req.userId;
-    const { product_id } = req.body;
+    const { id } = req.body;
 
     try {
         const result = await Cart.updateOne(
             {
-                user_id: user_id,
-                'items.product': product_id
+              user_id: user_id,
+              'items._id': id
             },
             {
-                $pull: {
-                    items: { product: product_id }
-                }
-            }
+              $pull: {
+                items: { _id: id }
+              }
+            },
         );
     
         if (result.modifiedCount > 0) {
