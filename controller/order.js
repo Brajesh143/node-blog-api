@@ -17,7 +17,7 @@ const createOrder = asyncHandler(async (req, res, next) => {
             }
         ))
 
-        const totalAmount = orderItems.reduce((acc, item) => acc + (item.quantity * item.price), 0);
+        const totalAmount = orderItems.reduce((acc, item) => acc + item.price, 0);
 
         const orderCreate = await Order.create({
             user_id: user_id,

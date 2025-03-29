@@ -7,7 +7,7 @@ router.post('/', tokenValidator, cartController.createCart);
 
 router.get('/', tokenValidator, cartController.getCart);
 
-router.put('/:id', tokenValidator, cartController.updateCart);
+router.put('/:id/:type', tokenValidator, cartController.updateCart);
 
 router.post('/remove-item', tokenValidator, cartController.removeCartItem);
 

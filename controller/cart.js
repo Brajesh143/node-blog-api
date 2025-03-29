@@ -134,7 +134,30 @@ const getCart = asyncHandler(async(req, res, next) => {
 })
 
 const updateCart = asyncHandler(async (req, res, next) => {
-    // update cart
+    const user_id = req.userId;
+    const { id, type } = req.params;
+
+    try {
+        const cart = await Cart.findOne({ user_id: user_id }).populate({
+            path: "items.product",
+            select: "name price product_image",
+        });
+        const existingItem = cart.items.find((item) => item._id == id);
+        if (existingItem) {
+            if (type === 'inc') {
+                existingItem.quantity = parseInt(existingItem.quantity) + 1;
+                existingItem.price = parseInt(existingItem.price) + parseInt(existingItem.product.price);
+            } else {
+                existingItem.quantity = parseInt(existingItem.quantity) - 1;
+                existingItem.price = parseInt(existingItem.price) - parseInt(existingItem.product.price);
+            }
+        }
+        await cart.save();
+        logger.info('Cart updated successfully');
+        return res.status(200).json({ message: 'Cart updated successfully' });
+    } catch(err) {
+        return next(err);
+    }
 })
 
 const removeCartItem = asyncHandler(async (req, res, next) => {
