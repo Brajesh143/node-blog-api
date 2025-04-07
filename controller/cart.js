@@ -205,6 +205,22 @@ const deleteCart = asyncHandler(async (req, res, next) => {
 
 })
 
-module.exports = { createCart, getCart, updateCart, deleteCart, removeCartItem };
+const masterEndPoint = asyncHandler(async(req, res, nest) => {
+    const user_id = req.userId;
+
+    try {
+        const cart = await Cart.findOne({ user_id: user_id });
+    
+        let totalItems = 0;
+        if(cart) {
+            totalItems = cart.items.reduce((total, item) => total + item.quantity, 0);
+        }
+        return res.status(200).json({ message: "Master Api", totalItems })
+    } catch(err) {
+        return next(err);
+    }
+})
+
+module.exports = { createCart, getCart, updateCart, deleteCart, removeCartItem, masterEndPoint };
 
 

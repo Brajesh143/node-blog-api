@@ -13,4 +13,6 @@ router.post('/remove-item', tokenValidator, cartController.removeCartItem);
 
 router.delete('/:id', tokenValidator, cartController.deleteCart);
 
+router.get('/master-endpoint', tokenValidator, cartController.masterEndPoint);
+
 module.exports = router;

@@ -21,6 +21,9 @@ const tokenValidator = async (req, res, next) => {
         // Verify the token
         jwt.verify(token, 'somesupersecretsecret', (err, user) => {
             if (err) {
+                if (err.name === 'TokenExpiredError') {
+                    return res.status(401).json({ message: 'Token expired' });
+                }
                 return res.status(403).json({ message: 'Invalid token' });
             }
   
