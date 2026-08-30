@@ -78,6 +78,63 @@ app.use('/api/product', productRouter)
 app.use('/api/cart', cartRouter)
 app.use('/api/order', orderRouter)
 
+// GET User
+app.get("/user", (req, res) => {
+    setTimeout(() => {
+        res.json({
+            id: 1,
+            name: "Brajesh",
+            role: "Senior Software Engineer"
+        });
+    }, 1000);
+});
+
+
+// GET Orders
+app.get("/orders", (req, res) => {
+    // setTimeout(() => {
+    //     res.json([
+    //         {
+    //             id: 101,
+    //             product: "Laptop",
+    //             amount: 80000
+    //         },
+    //         {
+    //             id: 102,
+    //             product: "Monitor",
+    //             amount: 20000
+    //         }
+    //     ]);
+    // }, 2000);
+
+    setTimeout(() => {
+        res.status(500).json({
+            api: "API 2",
+            status: "failed"
+        });
+    }, 1500);
+});
+
+
+// GET Payments
+app.get("/payments", (req, res) => {
+    setTimeout(() => {
+        res.json([
+            {
+                id: 501,
+                amount: 80000,
+                status: "success"
+            },
+            {
+                id: 502,
+                amount: 20000,
+                status: "success"
+            }
+        ]);
+    }, 1500);
+});
+
+
 app.use(errorHandler)
 
 app.listen(listenPort, (err) => {
