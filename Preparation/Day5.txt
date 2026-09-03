@@ -1,0 +1,188 @@
+Node.js + FastAPI
+=====================
+
+Theory:
+--------
+
+Part A — Node.js API Security
+
+    Understand:
+
+        Authentication vs Authorization
+        
+            Authentication
+                ↓
+            "Who are you?"
+
+            Authorization
+                ↓
+            "What are you allowed to do?"
+
+            Example:
+
+            Login
+            ↓
+            JWT
+            ↓
+            Authenticated User
+            ↓
+            Role/Permission
+            ↓
+            Authorization
+
+    Learn:
+
+        JWT
+        Access token
+        Refresh token
+        Password hashing
+        Authentication middleware
+        Authorization middleware
+        RBAC
+        CORS
+        Rate limiting
+        Input validation
+        SQL/NoSQL injection
+        XSS
+        Secure HTTP headers
+
+
+Part B — FastAPI Fundamentals
+
+    Understand:
+
+        Client
+        ↓
+        FastAPI
+        ↓
+        Router
+        ↓
+        Pydantic Validation
+        ↓
+        Service
+        ↓
+        Database
+
+    Learn:
+
+        FastAPI application
+        Routes
+        Path parameters
+        Query parameters
+        Request body
+        Pydantic models
+        Response models
+        Dependency Injection
+        async def
+        HTTP status codes
+
+        Example:
+
+            @app.get("/users/{user_id}")
+            async def get_user(user_id: int):
+                return {"id": user_id}
+
+Backend Practical:
++++++++++++++++++++++
+
+Exercise 1 — JWT Authentication — 20 min
+
+    Create:
+
+        POST /register
+        POST /login
+        GET  /profile
+
+    Flow:
+
+        Register
+        ↓
+        Hash Password
+        ↓
+        Store User
+
+        Login
+        ↓
+        Verify Password
+        ↓
+        Generate JWT
+        ↓
+        Return Token
+
+        GET /profile
+        ↓
+        JWT Middleware
+        ↓
+        Verify Token
+        ↓
+        Return User
+
+
+Exercise 2 — Role-based authorization
+
+    Create:
+
+        user
+        admin
+
+    Endpoints:
+
+        GET /profile       → user + admin
+        GET /users         → admin only
+        DELETE /users/:id  → admin only
+
+    Think:
+
+        Authentication
+            ↓
+        Who is the user?
+            ↓
+        Authorization
+            ↓
+        What can the user do?
+
+
+Exercise 3 — FastAPI CRUD
+
+    Create:
+
+        POST   /products
+        GET    /products
+        GET    /products/{id}
+        PUT    /products/{id}
+        DELETE /products/{id}
+
+    Use Pydantic:
+
+        class ProductCreate(BaseModel):
+            name: str
+            price: float
+            category: str
+
+    Add:
+
+        Validation
+        Response model
+        Proper status codes
+        Error handling
+        Backend Interview Questions
+
+
+Answer aloud:
+==============
+
+    Authentication vs authorization?
+    What is JWT?
+    How does JWT authentication work?
+    Where should a JWT be stored?
+    Access token vs refresh token?
+    What is RBAC?
+    What is CORS?
+    What is rate limiting?
+    How do you secure a Node.js API?
+    How do you validate API input?
+    What is dependency injection in FastAPI?
+    Pydantic vs normal Python classes?
+    async def in FastAPI — when is it useful?
+    How would you structure a large FastAPI application?
+    How would you handle authentication in FastAPI?

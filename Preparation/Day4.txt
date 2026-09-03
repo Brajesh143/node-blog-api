@@ -1,0 +1,193 @@
+Node.js — Event Loop & Performance
+-------------------------------------
+
+Theory:
+-------
+    A. Event Loop phases
+
+        Understand the high-level flow:
+
+            JavaScript
+                ↓
+            Call Stack
+                ↓
+            Async operation
+                ↓
+            OS / libuv
+                ↓
+            Callback queues
+                ↓
+            Event Loop
+                ↓
+            Call Stack
+
+        Learn the important Node.js concepts:
+
+            Call Stack
+            Event Loop
+            libuv
+            Timers
+            I/O callbacks
+            Poll phase
+            Check phase
+            setImmediate()
+            process.nextTick()
+            Promise microtasks
+
+
+    B. Microtasks vs Macrotasks
+
+        Understand the priority roughly as:
+
+            Synchronous code
+                ↓
+            process.nextTick()
+                ↓
+            Promise microtasks
+                ↓
+            Macrotask / Event Loop phases
+
+
+    C. CPU-bound vs I/O-bound
+
+        This is extremely important for Node.js interviews.
+
+        I/O-bound
+
+            Examples:
+
+            Database query
+            API call
+            File read
+            Network request
+
+        CPU-bound
+
+            Examples:
+
+            Large image processing
+            Video encoding
+            Huge calculation
+            Complex data processing
+
+        These can block the JavaScript thread.
+
+            Learn possible solutions:
+
+            Worker Threads
+            Child Processes
+            Separate services
+            Background jobs
+
+Node.js Practical:
+-------------------
+
+    Exercise 1 — Predict the output — 15 min
+    
+        Question 1
+            console.log("A");
+
+            setTimeout(() => console.log("B"), 0);
+
+            Promise.resolve().then(() => console.log("C"));
+
+            process.nextTick(() => console.log("D"));
+
+            console.log("E");
+
+            Predict the output without running it.
+
+            Then explain why.
+
+        Question 2
+            console.log(1);
+
+            setTimeout(() => console.log(2), 0);
+
+            setImmediate(() => console.log(3));
+
+            Promise.resolve().then(() => console.log(4));
+
+            process.nextTick(() => console.log(5));
+
+            console.log(6);
+
+
+    Exercise 2 — Find the blocking code — 10 min
+
+        Consider:
+
+        app.get("/report", (req, res) => {
+            const result = hugeCalculation();
+
+            res.json(result);
+        });
+
+        Assume hugeCalculation() takes 10 seconds.
+
+        Answer:
+
+        What happens to other requests?
+        Why?
+        Is this I/O-bound or CPU-bound?
+        How would you fix it?
+    
+    
+    Exercise 3 — Worker Thread scenario — 10 min
+
+        Design a solution for:
+
+        A Node.js API needs to resize thousands of images. Image processing takes significant CPU time.
+
+        Explain:
+
+            API Request
+                ↓
+            Node.js
+                ↓
+            Job Queue
+                ↓
+            Worker
+                ↓
+            Image Processing
+                ↓
+            Storage
+
+
+    Exercise 4 — Senior scenario — 10 min
+
+        Answer:
+
+        Your Node.js application is receiving 10,000 requests/minute. CPU suddenly reaches 100%. What would you investigate?
+
+            Your answer should include:
+
+            CPU profiling
+            Infinite loops
+            Synchronous/blocking code
+            Large JSON processing
+            Heavy computation
+            Memory/GC
+            Database/API latency
+            Worker threads
+            Horizontal scaling
+            Node.js Interview Questions
+
+Answer aloud:
+--------------
+
+    Explain the Node.js Event Loop.
+    What is libuv?
+    What are microtasks?
+    process.nextTick() vs Promise microtasks?
+    setImmediate() vs setTimeout()?
+    Why is Node.js called single-threaded?
+    Does Node.js actually use multiple threads?
+    What is an I/O-bound operation?
+    What is a CPU-bound operation?
+    How would you handle CPU-heavy work?
+    What happens if one request executes a 10-second synchronous function?
+    How would you investigate high CPU usage?
+    How can Worker Threads help?
+    When would you use a background job?
+    How would you prevent one expensive operation from affecting other users?
