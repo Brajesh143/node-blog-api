@@ -1,0 +1,213 @@
+Node.js — Performance & Reliability
+============================================
+
+Theory — 45 min
+----------------
+
+    A. API Timeout:
+    -----------------
+
+        Why do we need:
+
+            Client
+            ↓
+            API
+            ↓
+            External Service
+
+        If the external service hangs for 60 seconds, your API shouldn't wait indefinitely.
+
+        Understand:
+
+            Request timeout
+            Connection timeout
+            Socket timeout
+            Upstream timeout
+
+    B. Retry:
+    ---------
+
+        Review:
+
+            Request
+            ↓
+            Failure
+            ↓
+            Retry
+            ↓
+            Exponential Backoff
+            ↓
+            Success / Final Failure
+
+        But understand an important rule:
+
+            Don't retry every error.
+
+            For example:
+
+                400 → Don't retry
+                401 → Usually don't retry
+                403 → Don't retry
+                404 → Usually don't retry
+                429 → Retry after appropriate delay
+                500 → Potentially retry
+                503 → Potentially retry
+
+    C. Rate Limiting:
+    ------------------
+
+        Understand why APIs need protection.
+
+        Example:
+
+            Normal user
+            → 100 requests/min
+
+            Attacker/Buggy client
+            → 100,000 requests/min
+
+            Rate limiting can protect:
+
+                API servers
+                Database
+                Third-party APIs
+                Authentication endpoints
+
+            Know the basic idea of:
+
+                Fixed window
+                Sliding window
+                Token bucket
+
+
+    D. Graceful Failure:
+    ---------------------
+
+        A production API should not simply crash because one dependency failed.
+
+        Think:
+
+                    API
+                    ↓
+            ┌──────┴──────┐
+            ↓             ↓
+            Database      External API
+            ↓             ↓
+            Success       Failure
+                            ↓
+                        Fallback /
+                        Retry /
+                        Error
+
+        Learn:
+
+            Graceful degradation
+            Circuit breaker — concept only
+            Fallback
+            Health check
+            Dependency failure
+            
+            
+Node.js Practical — 45 min:
+===============================
+
+    Exercise 1 — Build a reliable API call — 15 min
+
+        Create:
+
+            async function callExternalAPI() {
+                // simulate API
+            }
+
+            Add:
+
+                Timeout
+                +
+                Retry
+                +
+                Exponential Backoff
+
+            Desired behavior:
+
+                Attempt 1 → timeout
+                Wait 1 sec
+
+                Attempt 2 → 500
+                Wait 2 sec
+
+                Attempt 3 → success
+
+
+    Exercise 2 — Rate limiter — 15 min
+
+        Implement a very simple in-memory rate limiter.
+
+            Requirement:
+
+                Maximum:
+                    5 requests
+                    per minute
+                    per IP
+
+            Expected:
+
+                Request 1 → 200
+                Request 2 → 200
+                Request 3 → 200
+                Request 4 → 200
+                Request 5 → 200
+                Request 6 → 429
+
+
+    Exercise 3 — Failure scenario — 15 min
+
+        Imagine:
+
+            Node.js API
+                ↓
+            Payment API
+
+        Payment API becomes unavailable.
+
+        Design your behavior.
+
+            Think about:
+
+                Timeout
+                ↓
+                Retry?
+                ↓
+                How many times?
+                ↓
+                Circuit breaker?
+                ↓
+                Fallback?
+                ↓
+                Return response
+
+        Important question:
+
+        Should you retry a payment request blindly?
+
+        Think about idempotency and duplicate payments.
+
+
+
+Node.js Interview Questions Answer aloud:
+=================
+
+    Why do APIs need timeouts?
+    When should an API request be retried?
+    Why use exponential backoff?
+    What is rate limiting?
+    How does a token bucket work conceptually?
+    What is graceful degradation?
+    What is a circuit breaker?
+    What is a health check?
+    What happens when a dependency goes down?
+    What is idempotency?
+    Why is idempotency important for payment APIs?
+    How would you prevent duplicate requests?
+    How would you protect an API from traffic spikes?
+    How would you handle a third-party API that is intermittently failing?
+    Design a production-ready external API call.
